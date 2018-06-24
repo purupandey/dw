@@ -78,4 +78,4 @@ if __name__ == '__main__':
 
         streamListener = TwitterStreamListener(c)
         myStream = tweepy.Stream(auth=api.auth, listener=streamListener, tweet_mode='extended')
-        myStream.filter(track=['movie','movies'], async=True)
+        myStream.filter(track=['Avengers','avengers'], languages=["en"], async=True)
