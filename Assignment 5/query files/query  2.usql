@@ -1,0 +1,24 @@
+@searchlog = 
+    EXTRACT 
+                Tcs int,
+                Main string,
+                Side_1_Route string,
+                Activation_Date DateTime,
+                Latitude double?,
+                Longitude double?,
+                Count_Date DateTime,
+                eight_Peak_Hr_Vehicle_Volume int,
+                eight_Peak_Hr_Pedestrian_Volume int
+    FROM "/signal_data/data.csv"
+    USING Extractors.Csv(encoding: Encoding.UTF8, skipFirstNRows: 1);
+
+@rs1 =
+    SELECT Main, Activation_Date, (eight_Peak_Hr_Vehicle_Volume + eight_Peak_Hr_Pedestrian_Volume) AS net_volume
+    FROM @searchlog
+    WHERE Activation_Date > DateTime.Parse("2013/01/01")
+    ORDER BY net_volume DESC
+    FETCH 10 ROWS;
+
+OUTPUT @rs1
+TO "/output/op_query2.csv"
+USING Outputters.Csv(outputHeader: true);

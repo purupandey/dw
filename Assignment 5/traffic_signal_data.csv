@@ -1,4 +1,4 @@
-TCS #, Main , Midblock Route , Side 1 Route , Side 2 Route ,Activation Date,Latitude,Longitude,Count Date,8 Peak Hr Vehicle Volume,8 Peak Hr Pedestrian Volume
+TCS,Main,Midblock Route,Side 1 Route,Side 2 Route,Activation Date,Latitude,Longitude,Count Date,Peak Hr Vehicle Volume,Peak Hr Pedestrian Volume
 2, JARVIS ST ,, FRONT ST E ,,11/15/1948,43.649418,-79.371446,06-21-2017,15662,13535
 3, KING ST E ,, JARVIS ST ,,08/23/1950,43.6504606,-79.3719239,09-17-2016,12960,7333
 4, JARVIS ST ,, ADELAIDE ST E ,,09-12-1958,43.6515337,-79.37236,11-08-2016,17770,7083

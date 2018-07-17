@@ -1,0 +1,28 @@
+@searchlog = 
+    EXTRACT 
+                Tcs int,
+                Main string,
+                Side_1_Route string,
+                Activation_Date DateTime,
+                Latitude double?,
+                Longitude double?,
+                Count_Date DateTime,
+                eight_Peak_Hr_Vehicle_Volume int,
+                eight_Peak_Hr_Pedestrian_Volume int
+    FROM "/signal_data/data.csv"
+    USING Extractors.Csv(encoding: Encoding.UTF8, skipFirstNRows: 1);
+
+@rs1=
+SELECT Main, Count_Date.DayOfWeek.ToString("f") AS Day, (int?)(eight_Peak_Hr_Vehicle_Volume+eight_Peak_Hr_Pedestrian_Volume) AS net_volume
+FROM @searchlog;
+
+@rs2=
+SELECT Main ,MAX(net_volume) AS total_volume FROM @rs1 GROUP BY Main;
+
+@rs3=
+SELECT s.Main, s.total_volume, p.Day FROM @rs2 AS s INNER JOIN @rs1 AS p ON s.total_volume==p.net_volume AND s.Main==p.Main;
+
+
+OUTPUT @rs3
+TO "/output/op_query5.csv"
+USING Outputters.Csv(outputHeader: true);
