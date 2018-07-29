@@ -2,10 +2,10 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 import re
 from sklearn.decomposition import TruncatedSVD
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.set(style="ticks", color_codes=True)
 
 def readData(textfile):
     data = []
@@ -18,35 +18,27 @@ def readData(textfile):
             data.append(split)
     return data
 
-data = readData("Assignment 6/test-gold.txt")
+data = readData("Assignment 6/train.txt")
 data = np.array(data).astype("str")
 len(data)
 
+# for every language select 300 documents
+data = pd.DataFrame(data)
+languages = data[1].unique()
+sample_df = pd.DataFrame([])
+for i in languages:
+    sample_df = sample_df.append(data[data[1]==i].sample(300))
+
+
 # feature extraction step
 vectorizer = CountVectorizer()
-x_train = vectorizer.fit_transform(data[:,0])
-print(x_train)
+x_train = vectorizer.fit_transform(sample_df[0])
+print(x_train.shape)
 
 # PCA on the data
-svd = TruncatedSVD(n_components=25, random_state=42)
+svd = TruncatedSVD(n_components=10, random_state=42)
 svd_op = svd.fit_transform(x_train)
 
 # plot data
-
-
-# train test split
-X_train, X_test, y_train, y_test = train_test_split(svd_op, data[:, 1], test_size=0.33, random_state=42)
-
-# RF
-rf_clf = RandomForestClassifier()
-rf_clf.fit(X=X_train, y=y_train)
-
-predictions = rf_clf.predict(X= X_test)
-accuracy_score(y_test, predictions)
-
-# LR
-lr_clf = LogisticRegression()
-lr_clf.fit(X=X_train, y=y_train)
-
-predictions = lr_clf.predict(X= X_test)
-accuracy_score(y_test, predictions)
+sns.pairplot(pd.DataFrame(svd_op))
+plt.show()
