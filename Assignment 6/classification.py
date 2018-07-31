@@ -4,7 +4,7 @@ import re
 from sklearn.decomposition import TruncatedSVD
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.feature_selection import SelectKBest, chi2
@@ -37,7 +37,7 @@ def pipeLine(feat_comb, classifier="RF"):
         pipeline = Pipeline([("features", feat_comb), ("dt", clf)])
 
     elif classifier == "NB":
-        clf = MultinomialNB()
+        clf = BernoulliNB()
         pipeline = Pipeline([("features", feat_comb), ("nb", clf)])
 
     elif classifier == "SVM":
@@ -104,7 +104,7 @@ def gridSearch(pipeline, param_grid, sparse_data, labels, clf_name):
 data = readData("Assignment 6/train.txt")
 data = np.array(data).astype("str")
 data = pd.DataFrame(data)
-print("\nSize of data: ", len(data))
+print("\nSize of data: ", data.shape)
 
 # feature extraction step
 vectorizer = CountVectorizer()

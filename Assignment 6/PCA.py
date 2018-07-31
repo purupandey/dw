@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 import re
 from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -39,6 +40,14 @@ print(x_train.shape)
 svd = TruncatedSVD(n_components=10, random_state=42)
 svd_op = svd.fit_transform(x_train)
 
+svd_df = pd.DataFrame(svd_op)
+svd_df[10] = list(sample_df[1])
+
+# convert to numerical label
+le = LabelEncoder()
+le.fit(svd_df[10])
+svd_df[10] = le.transform(svd_df[10])
+
 # plot data
-sns.pairplot(pd.DataFrame(svd_op))
+sns.pairplot(svd_df.iloc[:, 0:10])
 plt.show()
